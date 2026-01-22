@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { ChatSession, Episode, Character } from '@prisma/client';
+
+type SessionWithRelations = ChatSession & {
+  episode: Episode & {
+    character: Character;
+  };
+};
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,7 +38,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Transform to chat history format
-    const chatHistory = sessions.map((session) => {
+    const chatHistory = sessions.map((session: SessionWithRelations) => {
       const messages = (session.messages as any[]) || [];
       const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 

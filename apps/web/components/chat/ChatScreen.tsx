@@ -5,7 +5,8 @@ import { ArrowLeft, Heart, Info } from 'lucide-react';
 import { ChatBubble } from './ChatBubble';
 import { ChatInput } from './ChatInput';
 import { VideoPlayer } from '../video/VideoPlayer';
-import type { ChatSession, Message, Character, Episode } from '@nobada/types';
+import type { Message, Character, Episode } from '@nobada/types';
+import type { ChatSession, SessionStatus } from '@prisma/client';
 import { cn } from '@nobada/utils';
 
 interface ChatScreenProps {
@@ -25,7 +26,7 @@ export function ChatScreen({
   onSendMessage,
   onBack,
 }: ChatScreenProps) {
-  const [messages, setMessages] = useState<Message[]>(session.messages || []);
+  const [messages, setMessages] = useState<Message[]>((session.messages as any as Message[]) || []);
   const [isTyping, setIsTyping] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -151,9 +152,9 @@ export function ChatScreen({
       {/* Input area */}
       <ChatInput
         onSend={handleSendMessage}
-        disabled={isTyping || session.status !== 'ACTIVE'}
+        disabled={isTyping || session.status !== ('ACTIVE' as const)}
         placeholder={
-          session.status !== 'ACTIVE'
+          session.status !== ('ACTIVE' as const)
             ? '대화가 종료되었습니다'
             : '메시지를 입력하세요...'
         }
