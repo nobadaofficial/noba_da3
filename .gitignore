@@ -4,6 +4,10 @@ node_modules
 .pnp.js
 pnpm-lock.yaml
 
+# Monorepo config (hide from Vercel)
+pnpm-workspace.yaml
+turbo.json
+
 # Testing
 coverage
 

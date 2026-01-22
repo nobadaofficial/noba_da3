@@ -19,7 +19,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@nobada/constants": ["./lib/nobada-packages/constants"],
+      "@nobada/types": ["./lib/nobada-packages/types"],
+      "@nobada/utils": ["./lib/nobada-packages/utils"]
     }
   },
   "include": [
