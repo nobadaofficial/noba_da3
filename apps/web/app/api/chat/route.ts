@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     // Generate AI response using Gemini 2.5 Flash
     try {
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash-exp",
+        model: "gemini-2.5-flash",
       });
 
       // Parse personality if it's a JSON object
