@@ -88,15 +88,20 @@ export async function POST(request: NextRequest) {
         model: "gemini-2.0-flash-exp",
       });
 
+      // Parse personality if it's a JSON object
+      const personalityData = typeof character.personality === 'object'
+        ? character.personality as any
+        : {};
+
       const prompt = `당신은 "${character.name}"라는 ${character.age}살 ${character.occupation} 캐릭터입니다.
 
 캐릭터 설명: ${character.description}
-성격: ${character.personality}
-취미: ${character.hobbies}
-이상형: ${character.idealType}
+성격: ${personalityData.traits ? personalityData.traits.join(', ') : JSON.stringify(character.personality)}
+배경 스토리: ${character.backstory}
+태그: ${character.tags.join(', ')}
 
-현재 상황: ${session.episode.title}
-${session.episode.scenario}
+현재 에피소드: ${session.episode.title}
+상황 설명: ${session.episode.description}
 
 이전 대화 내역:
 ${conversationHistory || '(첫 대화입니다)'}
