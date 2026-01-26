@@ -1,28 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
-import jwt from 'jsonwebtoken';
+import { cookies } from 'next/headers';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const ADMIN_COOKIE_NAME = 'nobada_admin_auth';
 
-function verifyAuth(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+async function verifyAuth() {
+  const cookieStore = await cookies();
+  const authCookie = cookieStore.get(ADMIN_COOKIE_NAME);
+
+  if (!authCookie || authCookie.value !== 'authenticated') {
     throw new Error('Unauthorized');
-  }
-
-  const token = authHeader.substring(7);
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    return decoded;
-  } catch (error) {
-    throw new Error('Invalid token');
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     // Verify authentication
-    verifyAuth(request);
+    await verifyAuth();
 
     const formData = await request.formData();
     const file = formData.get('file') as File;
