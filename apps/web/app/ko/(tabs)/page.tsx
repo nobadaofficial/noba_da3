@@ -49,8 +49,8 @@ async function getInitialClips(): Promise<{
     characterName: character.name,
     characterAge: character.age,
     characterOccupation: character.occupation,
-    // Use preview video if available, otherwise use placeholder
-    videoUrl: character.previewVideoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    // Use local video from /videos/ directory
+    videoUrl: character.previewVideoUrl || '/videos/sample1_260126.mp4',
     thumbnailUrl: character.thumbnailUrl,
     description: character.description.substring(0, 100), // Limit description length
     tags: character.tags,
