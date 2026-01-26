@@ -34,10 +34,11 @@ export default function NewCharacterPage() {
     setIsSubmitting(true);
 
     try {
+      const token = localStorage.getItem('admin_token');
       const response = await fetch('/api/admin/characters', {
         method: 'POST',
-        credentials: 'include',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -102,9 +103,12 @@ export default function NewCharacterPage() {
       const formData = new FormData();
       formData.append('file', file);
 
+      const token = localStorage.getItem('admin_token');
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
-        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: formData,
       });
 

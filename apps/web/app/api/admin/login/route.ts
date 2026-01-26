@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import crypto from 'crypto';
 
-const ADMIN_COOKIE_NAME = 'nobada_admin_auth';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '1235';
-const COOKIE_MAX_AGE = 60 * 60 * 24; // 24 hours
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'nobada_admin_token_2026';
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,17 +23,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const response = NextResponse.json({ success: true });
-
-    response.cookies.set(ADMIN_COOKIE_NAME, 'authenticated', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: COOKIE_MAX_AGE,
-      path: '/',
+    return NextResponse.json({
+      success: true,
+      token: ADMIN_TOKEN
     });
-
-    return response;
   } catch (error) {
     console.error('Admin login error:', error);
     return NextResponse.json(
@@ -45,15 +37,14 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({ success: true });
-  response.cookies.delete(ADMIN_COOKIE_NAME);
-  return response;
+  return NextResponse.json({ success: true });
 }
 
-export async function GET() {
-  const cookieStore = await cookies();
-  const authCookie = cookieStore.get(ADMIN_COOKIE_NAME);
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+
   return NextResponse.json({
-    authenticated: authCookie?.value === 'authenticated',
+    authenticated: token === ADMIN_TOKEN,
   });
 }

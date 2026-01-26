@@ -84,17 +84,18 @@ export default function AdminDashboardPage() {
   };
 
   const handleLogout = async () => {
-    await fetch('/api/admin/login', { method: 'DELETE', credentials: 'include' });
+    localStorage.removeItem('admin_token');
     router.push('/ko/admin/login');
     router.refresh();
   };
 
   const handleTogglePublish = async (characterId: string, currentStatus: boolean) => {
     try {
+      const token = localStorage.getItem('admin_token');
       const response = await fetch(`/api/admin/characters/${characterId}`, {
         method: 'PATCH',
-        credentials: 'include',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ isPublished: !currentStatus }),

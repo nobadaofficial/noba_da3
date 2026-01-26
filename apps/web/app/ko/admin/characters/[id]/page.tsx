@@ -45,8 +45,11 @@ export default function EditCharacterPage() {
 
   const fetchCharacter = async () => {
     try {
+      const token = localStorage.getItem('admin_token');
       const response = await fetch(`/api/admin/characters/${characterId}`, {
-        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error('Failed to fetch character');
@@ -70,10 +73,11 @@ export default function EditCharacterPage() {
     setIsSubmitting(true);
 
     try {
+      const token = localStorage.getItem('admin_token');
       const response = await fetch(`/api/admin/characters/${characterId}`, {
         method: 'PATCH',
-        credentials: 'include',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
@@ -99,9 +103,12 @@ export default function EditCharacterPage() {
     }
 
     try {
+      const token = localStorage.getItem('admin_token');
       const response = await fetch(`/api/admin/characters/${characterId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {

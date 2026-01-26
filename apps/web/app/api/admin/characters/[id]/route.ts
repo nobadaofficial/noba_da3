@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 
-const ADMIN_COOKIE_NAME = 'nobada_admin_auth';
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'nobada_admin_token_2026';
 
-async function verifyAuth() {
-  const cookieStore = await cookies();
-  const authCookie = cookieStore.get(ADMIN_COOKIE_NAME);
+function verifyAuth(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
 
-  if (!authCookie || authCookie.value !== 'authenticated') {
+  if (token !== ADMIN_TOKEN) {
     throw new Error('Unauthorized');
   }
 }
@@ -19,7 +18,7 @@ export async function PATCH(
 ) {
   try {
     // Verify authentication
-    await verifyAuth();
+    verifyAuth(request);
 
     const { id } = await params;
     const body = await request.json();
@@ -51,7 +50,7 @@ export async function DELETE(
 ) {
   try {
     // Verify authentication
-    await verifyAuth();
+    verifyAuth(request);
 
     const { id } = await params;
 
@@ -81,7 +80,7 @@ export async function GET(
 ) {
   try {
     // Verify authentication
-    await verifyAuth();
+    verifyAuth(request);
 
     const { id } = await params;
 

@@ -27,7 +27,8 @@ export default function AdminLoginPage() {
 
       const data = await response.json();
 
-      if (data.success) {
+      if (data.success && data.token) {
+        localStorage.setItem('admin_token', data.token);
         router.push('/ko/admin');
         router.refresh();
       } else {
