@@ -24,8 +24,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const cookieStore = await cookies();
-    cookieStore.set(ADMIN_COOKIE_NAME, 'authenticated', {
+    const response = NextResponse.json({ success: true });
+
+    response.cookies.set(ADMIN_COOKIE_NAME, 'authenticated', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
       path: '/',
     });
 
-    return NextResponse.json({ success: true });
+    return response;
   } catch (error) {
     console.error('Admin login error:', error);
     return NextResponse.json(
@@ -44,9 +45,9 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE() {
-  const cookieStore = await cookies();
-  cookieStore.delete(ADMIN_COOKIE_NAME);
-  return NextResponse.json({ success: true });
+  const response = NextResponse.json({ success: true });
+  response.cookies.delete(ADMIN_COOKIE_NAME);
+  return response;
 }
 
 export async function GET() {
