@@ -104,6 +104,14 @@ export default function NewCharacterPage() {
       formData.append('file', file);
 
       const token = localStorage.getItem('admin_token');
+      console.log('Upload - Token from localStorage:', token);
+
+      if (!token) {
+        alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+        window.location.href = '/ko/admin/login';
+        return;
+      }
+
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
         headers: {

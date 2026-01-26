@@ -7,6 +7,13 @@ function verifyAuth(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.replace('Bearer ', '');
 
+  console.log('=== Upload Auth Debug ===');
+  console.log('Authorization header:', authHeader);
+  console.log('Extracted token:', token);
+  console.log('Expected token:', ADMIN_TOKEN);
+  console.log('Match:', token === ADMIN_TOKEN);
+  console.log('========================');
+
   if (token !== ADMIN_TOKEN) {
     throw new Error('Unauthorized');
   }
@@ -16,6 +23,10 @@ export async function POST(request: NextRequest) {
   try {
     // Verify authentication
     verifyAuth(request);
+
+    console.log('=== Blob Config ===');
+    console.log('BLOB_READ_WRITE_TOKEN exists:', !!process.env.BLOB_READ_WRITE_TOKEN);
+    console.log('==================');
 
     const formData = await request.formData();
     const file = formData.get('file') as File;
