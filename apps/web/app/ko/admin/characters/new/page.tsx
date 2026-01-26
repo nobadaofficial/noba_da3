@@ -36,6 +36,7 @@ export default function NewCharacterPage() {
     try {
       const response = await fetch('/api/admin/characters', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -103,6 +104,7 @@ export default function NewCharacterPage() {
 
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
+        credentials: 'include',
         body: formData,
       });
 

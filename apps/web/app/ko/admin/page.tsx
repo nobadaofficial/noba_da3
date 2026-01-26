@@ -84,7 +84,7 @@ export default function AdminDashboardPage() {
   };
 
   const handleLogout = async () => {
-    await fetch('/api/admin/login', { method: 'DELETE' });
+    await fetch('/api/admin/login', { method: 'DELETE', credentials: 'include' });
     router.push('/ko/admin/login');
     router.refresh();
   };
@@ -93,6 +93,7 @@ export default function AdminDashboardPage() {
     try {
       const response = await fetch(`/api/admin/characters/${characterId}`, {
         method: 'PATCH',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

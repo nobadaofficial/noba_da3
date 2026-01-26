@@ -45,7 +45,9 @@ export default function EditCharacterPage() {
 
   const fetchCharacter = async () => {
     try {
-      const response = await fetch(`/api/admin/characters/${characterId}`);
+      const response = await fetch(`/api/admin/characters/${characterId}`, {
+        credentials: 'include',
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch character');
       }
@@ -70,6 +72,7 @@ export default function EditCharacterPage() {
     try {
       const response = await fetch(`/api/admin/characters/${characterId}`, {
         method: 'PATCH',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -98,6 +101,7 @@ export default function EditCharacterPage() {
     try {
       const response = await fetch(`/api/admin/characters/${characterId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
 
       if (!response.ok) {
