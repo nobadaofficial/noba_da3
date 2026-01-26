@@ -48,15 +48,8 @@ export default function AdminDashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if admin is logged in
-    const token = sessionStorage.getItem('admin_token');
-    if (!token) {
-      router.push('/ko/admin/login');
-      return;
-    }
-
     fetchData();
-  }, [router]);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -90,9 +83,10 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('admin_token');
+  const handleLogout = async () => {
+    await fetch('/api/admin/login', { method: 'DELETE' });
     router.push('/ko/admin/login');
+    router.refresh();
   };
 
   const handleTogglePublish = async (characterId: string, currentStatus: boolean) => {
@@ -101,7 +95,6 @@ export default function AdminDashboardPage() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('admin_token')}`,
         },
         body: JSON.stringify({ isPublished: !currentStatus }),
       });
